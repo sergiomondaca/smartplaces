@@ -1,24 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
-import cameraLock from "@/assets/camera-lock.jpg";
-import heroHouse from "@/assets/hero-house.jpg";
-import phoneScene from "@/assets/phone-scene.jpg";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Smart Places — Automatización e IoT para cada espacio" },
+      { title: "Smart Places — Tu casa actúa antes de que algo pase" },
       {
         name: "description",
         content:
-          "Integra automatización, IoT, seguridad, vigilancia, confort y alarmas en una sola app para casas, departamentos y empresas.",
+          "Domótica y seguridad inteligente en Santiago de Chile. Sistemas que disuaden al intruso antes de que cruce la primera barrera. Evaluación gratuita.",
       },
-      { property: "og:title", content: "Smart Places — Todo tu espacio conectado" },
+      { property: "og:title", content: "Smart Places — Tu casa actúa antes de que algo pase" },
       {
         property: "og:description",
         content:
-          "Soluciones integrales para controlar dispositivos de distintas marcas desde una sola app.",
+          "Seguridad proactiva y automatización integral para casas, departamentos y empresas. Todo orquestado desde una sola app.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,233 +25,396 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const solutions = [
+const WHATSAPP_URL = "https://wa.me/56900000000?text=Hola%20Smart%20Places%2C%20quiero%20una%20evaluaci%C3%B3n%20gratuita";
+
+const problemas = [
   {
-    number: "01",
-    title: "Automatización",
-    text: "Luces, clima, cortinas y rutinas que responden a tu forma de vivir.",
-    icon: "bolt",
+    antes: "Reacciona tarde",
+    despues: "Disuade temprano",
+    detalle:
+      "La alarma tradicional suena cuando el intruso ya está adentro. Smart Places actúa en la vereda: luz focal, voz disuasiva y alerta antes del primer cruce.",
   },
   {
-    number: "02",
-    title: "Seguridad",
-    text: "Accesos, sensores y alarmas conectados para proteger cada punto.",
-    icon: "shield",
+    antes: "Cámaras que nadie mira",
+    despues: "IA que detecta y actúa",
+    detalle:
+      "Grabar lo que ya pasó no protege. Nuestras cámaras con IA reconocen merodeo, distinguen personas de mascotas y gatillan acciones reales.",
   },
   {
-    number: "03",
-    title: "Vigilancia",
-    text: "Cámaras y alertas en vivo, disponibles estés donde estés.",
-    icon: "camera",
-  },
-  {
-    number: "04",
-    title: "Confort",
-    text: "Ambientes que ajustan temperatura, iluminación y audio por ti.",
-    icon: "sun",
+    antes: "Falla y nadie avisa",
+    despues: "Se recupera sola",
+    detalle:
+      "Monitoreo de salud del sistema 24/7. Si un sensor se desconecta o falla la red, el sistema avisa y conmuta a respaldo automáticamente.",
   },
 ];
 
-const segments = [
+const zonas = [
   {
-    label: "Residencial",
-    title: "Casa",
-    description: "Control integral para vivir con más seguridad, eficiencia y confort.",
-    items: ["Iluminación y clima", "Cámaras y sensores", "Escenas automatizadas"],
+    id: 1,
+    nombre: "Perímetro / vereda",
+    sensor: "Cámara con IA detecta merodeo",
+    disuasion: "Luz focal + mensaje de voz disuasivo",
+    escalamiento: "Registro del evento y aviso silencioso a tu celular",
+    segundo: "0",
   },
   {
-    label: "Vivienda vertical",
-    title: "Departamento",
-    description: "Tecnología compacta que simplifica cada acceso y ambiente.",
-    items: ["Cerraduras inteligentes", "Monitoreo remoto", "Control desde la app"],
+    id: 2,
+    nombre: "Reja / antejardín",
+    sensor: "Sensor de apertura o cruce de línea",
+    disuasion: "Sirena corta + luces de la casa encendidas",
+    escalamiento: "Notificación inmediata a tu celular con video en vivo",
+    segundo: "5",
   },
   {
-    label: "Corporativo",
-    title: "Empresa",
-    description: "Una operación conectada, escalable y visible desde un solo lugar.",
-    items: ["Control de accesos", "Vigilancia multi-sitio", "Panel centralizado"],
+    id: 3,
+    nombre: "Fachada / accesos",
+    sensor: "Intento de apertura en puerta o ventana",
+    disuasion: "Sirena completa + iluminación total",
+    escalamiento: "Alerta a vecinos y contactos de confianza",
+    segundo: "15",
+  },
+  {
+    id: 4,
+    nombre: "Interior",
+    sensor: "Intrusión confirmada por sensores interiores",
+    disuasion: "Alarma máxima + grabación continua",
+    escalamiento: "Botón de pánico y aviso a central de monitoreo",
+    segundo: "30",
   },
 ];
 
-function TechIcon({ name }: { name: string }) {
-  const common = {
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.7,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-
-  if (name === "shield") {
-    return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 3 5 6v5c0 4.7 2.8 8 7 10 4.2-2 7-5.3 7-10V6l-7-3Z"/><path d="m9.5 12 1.6 1.6 3.7-4"/></svg>;
-  }
-  if (name === "camera") {
-    return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3" y="7" width="14" height="11" rx="2"/><path d="m17 10 4-2v9l-4-2M7 7l1-2h4l1 2"/></svg>;
-  }
-  if (name === "sun") {
-    return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>;
-  }
-  return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg>;
-}
+const planes = [
+  {
+    nombre: "Hogar Esencial",
+    precio: "$19.990",
+    detalle: "Para departamentos y casas compactas",
+    items: ["Cámaras con IA en accesos", "Sensores de apertura", "App con alertas en vivo", "Soporte remoto"],
+  },
+  {
+    nombre: "Hogar Proactivo",
+    precio: "$34.990",
+    destacado: true,
+    detalle: "La defensa por zonas completa",
+    items: ["Todo lo de Hogar Esencial", "Disuasión por zonas (luz, voz, sirena)", "Monitoreo de salud del sistema", "Respaldos y recuperación automática"],
+  },
+  {
+    nombre: "Empresa",
+    precio: "A medida",
+    detalle: "Locales, oficinas y multi-sitio",
+    items: ["Control de accesos", "Vigilancia multi-sitio", "Central de monitoreo", "SLA y soporte prioritario"],
+  },
+];
 
 function ArrowIcon() {
-  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M14 7l5 5-5 5"/></svg>;
+  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M5 12h14M14 7l5 5-5 5" /></svg>;
+}
+
+function WhatsAppIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" className="h-4 w-4"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .8-.2 1.4Z" /></svg>;
+}
+
+/* Plano isométrico de la casa con anillos concéntricos que se iluminan hacia adentro */
+function HouseRings() {
+  const anillos = [
+    { rx: 300, ry: 128, delay: "0s", label: "Zona 1" },
+    { rx: 232, ry: 99, delay: "0.6s", label: "Zona 2" },
+    { rx: 164, ry: 70, delay: "1.2s", label: "Zona 3" },
+    { rx: 96, ry: 41, delay: "1.8s", label: "Zona 4" },
+  ];
+  return (
+    <svg viewBox="0 0 640 360" className="w-full" role="img" aria-label="Plano de casa con anillos de seguridad por zonas">
+      <defs>
+        <linearGradient id="houseFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="oklch(0.24 0.045 215)" />
+          <stop offset="100%" stopColor="oklch(0.19 0.018 240)" />
+        </linearGradient>
+      </defs>
+      {anillos.map((a) => (
+        <g key={a.label}>
+          <ellipse
+            cx="320" cy="220" rx={a.rx} ry={a.ry}
+            fill="none" stroke="var(--color-primary)" strokeWidth="1.5"
+            className="ring-wave" style={{ animationDelay: a.delay }}
+          />
+          <text
+            x={320 + a.rx * 0.72} y={220 - a.ry * 0.72}
+            fill="var(--color-muted-foreground)" fontSize="10" fontFamily="Space Grotesk, sans-serif"
+            className="ring-wave" style={{ animationDelay: a.delay }}
+          >
+            {a.label}
+          </text>
+        </g>
+      ))}
+      {/* Casa isométrica */}
+      <g>
+        <path d="M320 130 400 176 320 222 240 176Z" fill="url(#houseFill)" stroke="var(--color-primary)" strokeWidth="1.5" />
+        <path d="M240 176 320 222 320 268 240 222Z" fill="oklch(0.17 0.02 240)" stroke="var(--color-border)" strokeWidth="1" />
+        <path d="M400 176 320 222 320 268 400 222Z" fill="oklch(0.21 0.03 230)" stroke="var(--color-border)" strokeWidth="1" />
+        {/* Ventanas encendidas */}
+        <path d="M262 196 296 216 296 238 262 218Z" fill="var(--color-primary)" opacity="0.85" />
+        <path d="M344 216 378 196 378 218 344 238Z" fill="var(--color-primary)" opacity="0.5" />
+        {/* Punto central: la casa protegida */}
+        <circle cx="320" cy="220" r="5" fill="var(--color-status)" className="status-dot" />
+      </g>
+    </svg>
+  );
+}
+
+/* Diagrama interactivo de seguridad por zonas */
+function ZonasInteractivas() {
+  const [activa, setActiva] = useState(0);
+  const zona = zonas[activa];
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      {/* Anillos clicables */}
+      <div className="relative mx-auto w-full max-w-[520px]">
+        <svg viewBox="0 0 520 320" className="w-full">
+          {zonas.map((z, i) => {
+            const rx = 240 - i * 56;
+            const ry = 130 - i * 30;
+            const seleccionado = i === activa;
+            return (
+              <ellipse
+                key={z.id}
+                cx="260" cy="170" rx={rx} ry={ry}
+                fill={seleccionado ? "color-mix(in oklab, var(--color-primary) 8%, transparent)" : "transparent"}
+                stroke={seleccionado ? "var(--color-primary)" : "var(--color-border)"}
+                strokeWidth={seleccionado ? 2.5 : 1.5}
+                className="cursor-pointer transition-all duration-300 hover:stroke-primary"
+                onClick={() => setActiva(i)}
+                style={seleccionado ? { filter: "drop-shadow(0 0 12px color-mix(in oklab, var(--color-primary) 60%, transparent))" } : undefined}
+              />
+            );
+          })}
+          <circle cx="260" cy="170" r="6" fill="var(--color-status)" className="status-dot" />
+          <text x="260" y="196" textAnchor="middle" fill="var(--color-muted-foreground)" fontSize="11" fontFamily="Space Grotesk, sans-serif">TU CASA</text>
+        </svg>
+        {/* Botones de zona */}
+        <div className="mt-4 grid grid-cols-4 gap-2">
+          {zonas.map((z, i) => (
+            <button
+              key={z.id}
+              onClick={() => setActiva(i)}
+              className={`rounded-md border px-2 py-2.5 text-xs font-semibold transition-all ${
+                i === activa
+                  ? "border-primary bg-accent text-primary"
+                  : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              }`}
+            >
+              Zona {z.id}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Detalle de la zona activa */}
+      <div key={zona.id} className="anim-rise glass rounded-xl p-7 md:p-9">
+        <div className="flex items-center justify-between">
+          <div className="section-label">Zona {zona.id}</div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="status-dot h-2 w-2 rounded-full bg-status" />
+            Activa 24/7
+          </div>
+        </div>
+        <h3 className="mt-4 font-display text-3xl font-bold">{zona.nombre}</h3>
+        <div className="mt-7 space-y-5">
+          {[
+            ["Sensor", zona.sensor, "text-foreground"],
+            ["Disuasión", zona.disuasion, "text-primary"],
+            ["Escalamiento", zona.escalamiento, "text-foreground"],
+          ].map(([etapa, texto, color], i) => (
+            <div key={etapa} className="flex gap-4">
+              <div className="flex flex-col items-center">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-primary/40 bg-accent font-display text-xs font-bold text-primary">{i + 1}</span>
+                {i < 2 && <span className="mt-1 w-px flex-1 bg-border" />}
+              </div>
+              <div className="pb-1">
+                <div className="text-xs font-semibold uppercase tracking-[.14em] text-muted-foreground">{etapa}</div>
+                <div className={`mt-1 font-medium ${color}`}>{texto}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Línea de tiempo animada: segundo 0 → 5 → 15 → 30 */
+function Timeline() {
+  const marcas = [
+    { s: "0", label: "Detección en la vereda", pct: "0%" },
+    { s: "5", label: "Disuasión activa", pct: "16%" },
+    { s: "15", label: "Sirena y alertas", pct: "50%" },
+    { s: "30", label: "Central notificada", pct: "100%" },
+  ];
+  return (
+    <div className="mt-16">
+      <div className="relative h-1 rounded-full bg-border">
+        <div className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary opacity-30" />
+        {marcas.map((m) => (
+          <span key={m.s} className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background" style={{ left: m.pct }} />
+        ))}
+      </div>
+      <div className="relative mt-4 h-14">
+        {marcas.map((m) => (
+          <div key={m.s} className="absolute -translate-x-1/2 text-center" style={{ left: m.pct }}>
+            <div className="font-display text-lg font-bold text-primary">seg {m.s}</div>
+            <div className="mt-0.5 max-w-[110px] text-xs leading-snug text-muted-foreground">{m.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function Index() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background font-body text-foreground antialiased">
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-lg">
-        <div className="mx-auto flex h-20 max-w-[1360px] items-center justify-between px-5 md:px-10">
+      {/* Nav */}
+      <nav className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-lg">
+        <div className="mx-auto flex h-18 max-w-[1360px] items-center justify-between px-5 py-4 md:px-10">
           <a href="#inicio" className="flex items-center gap-3" aria-label="Smart Places, inicio">
-            <span className="grid h-9 w-9 place-items-center rounded-[4px] bg-primary text-primary-foreground">
-              <span className="h-3.5 w-3.5 border-2 border-current" />
+            <span className="grid h-9 w-9 place-items-center rounded-md border border-primary/40 bg-accent">
+              <span className="h-3 w-3 rounded-full bg-primary" style={{ boxShadow: "0 0 10px var(--color-primary)" }} />
             </span>
             <span className="font-display text-xl font-bold">Smart<span className="text-primary">Places</span></span>
           </a>
-          <div className="hidden items-center gap-9 text-sm text-muted-foreground md:flex">
-            <a href="#plataforma" className="transition-colors hover:text-primary">Plataforma</a>
-            <a href="#soluciones" className="transition-colors hover:text-primary">Soluciones</a>
-            <a href="#segmentos" className="transition-colors hover:text-primary">Segmentos</a>
+          <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
+            <a href="#problema" className="transition-colors hover:text-primary">El problema</a>
+            <a href="#zonas" className="transition-colors hover:text-primary">Seguridad por zonas</a>
+            <a href="#planes" className="transition-colors hover:text-primary">Planes</a>
           </div>
-          <Button asChild size="lg" className="h-11 rounded-[4px] px-5 shadow-none">
-            <a href="#contacto">Cotizar proyecto <ArrowIcon /></a>
+          <Button asChild className="rounded-md shadow-none">
+            <a href={WHATSAPP_URL} target="_blank" rel="noreferrer"><WhatsAppIcon /> WhatsApp</a>
           </Button>
         </div>
       </nav>
 
       <main>
-        <header id="inicio" className="border-b border-border">
-          <div className="mx-auto max-w-[1360px] px-5 pb-14 pt-16 text-center md:px-10 md:pb-20 md:pt-24">
-            <div className="anim-rise mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-accent px-4 py-2 text-xs font-semibold text-primary">
-              <span className="status-dot h-2 w-2 rounded-full bg-primary" />
-              Tecnología que conecta tu espacio
-            </div>
-            <h1 className="anim-rise mx-auto mt-7 max-w-[1000px] font-display text-5xl font-bold leading-[1.04] text-balance md:text-7xl lg:text-[5.4rem]" style={{ animationDelay: "80ms" }}>
-              Todo tu espacio. <span className="text-primary">Una sola app.</span>
-            </h1>
-            <p className="anim-rise mx-auto mt-7 max-w-[680px] text-lg leading-relaxed text-muted-foreground md:text-xl" style={{ animationDelay: "150ms" }}>
-              Integramos automatización, IoT, seguridad, vigilancia, confort y alarmas para que dispositivos de distintas marcas trabajen juntos.
-            </p>
-            <div className="anim-rise mt-10 flex flex-col justify-center gap-3 sm:flex-row" style={{ animationDelay: "220ms" }}>
-              <Button asChild size="lg" className="h-13 rounded-[4px] px-8 text-base shadow-none">
-                <a href="#contacto">Diseñar mi solución <ArrowIcon /></a>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="h-13 rounded-[4px] px-8 text-base shadow-none">
-                <a href="#plataforma">Conocer la plataforma</a>
-              </Button>
-            </div>
-          </div>
-
-          <div className="relative mx-auto max-w-[1360px] px-5 pb-5 md:px-10 md:pb-10">
-            <div className="relative overflow-hidden rounded-[6px] bg-muted">
-              <img src={heroHouse} alt="Casa moderna equipada con iluminación y seguridad inteligente" width={1600} height={700} className="aspect-[16/7] min-h-[320px] w-full object-cover" />
-              <div className="absolute inset-0 bg-hero-shade" />
-              <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4 text-primary-foreground md:bottom-8 md:left-8 md:right-8">
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-[.16em] opacity-80">Sistema conectado</div>
-                  <div className="mt-2 font-display text-2xl font-semibold md:text-3xl">Tu espacio responde en tiempo real</div>
-                </div>
-                <div className="flex items-center gap-2 rounded-[4px] border border-primary-foreground/30 bg-foreground/70 px-4 py-3 text-sm backdrop-blur-md">
-                  <span className="status-dot h-2 w-2 rounded-full bg-status" />
-                  12 dispositivos activos
-                </div>
+        {/* 1. Hero */}
+        <header id="inicio" className="relative border-b border-border">
+          <div className="bg-dotgrid absolute inset-0 opacity-60" />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%, color-mix(in oklab, var(--color-primary) 10%, transparent), transparent)" }} />
+          <div className="relative mx-auto grid max-w-[1360px] items-center gap-12 px-5 py-20 md:px-10 lg:grid-cols-2 lg:py-28">
+            <div>
+              <div className="anim-rise inline-flex items-center gap-2 rounded-full border border-primary/25 bg-accent/60 px-4 py-2 text-xs font-semibold text-primary">
+                <span className="status-dot h-2 w-2 rounded-full bg-status" />
+                Seguridad proactiva · Santiago de Chile
               </div>
-              <span className="device-marker left-[18%] top-[36%]"><span />Iluminación</span>
-              <span className="device-marker right-[14%] top-[24%]"><span />Cámara</span>
+              <h1 className="anim-rise mt-7 font-display text-5xl font-bold leading-[1.05] text-balance md:text-6xl lg:text-7xl" style={{ animationDelay: "90ms" }}>
+                Tu casa <span className="text-primary text-glow">actúa antes</span> de que algo pase.
+              </h1>
+              <p className="anim-rise mt-6 max-w-[540px] text-lg leading-relaxed text-muted-foreground" style={{ animationDelay: "170ms" }}>
+                Automatizamos todo lo automatizable y protegemos tu espacio de forma proactiva: el sistema disuade al intruso antes de que cruce la primera barrera, no sólo graba lo que ya pasó.
+              </p>
+              <div className="anim-rise mt-9 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "250ms" }}>
+                <Button asChild size="lg" className="h-13 rounded-md px-8 text-base shadow-none">
+                  <a href="#contacto">Evaluación gratuita <ArrowIcon /></a>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="h-13 rounded-md px-8 text-base shadow-none">
+                  <a href={WHATSAPP_URL} target="_blank" rel="noreferrer"><WhatsAppIcon /> Hablar por WhatsApp</a>
+                </Button>
+              </div>
+            </div>
+            <div className="anim-rise glass rounded-2xl p-6 md:p-8" style={{ animationDelay: "300ms" }}>
+              <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
+                <span className="font-semibold uppercase tracking-[.14em]">Defensa perimetral activa</span>
+                <span className="flex items-center gap-2"><span className="status-dot h-2 w-2 rounded-full bg-status" /> En línea</span>
+              </div>
+              <HouseRings />
+              <div className="mt-4 grid grid-cols-3 gap-3 border-t border-border pt-4 text-center text-xs text-muted-foreground">
+                <div><strong className="block font-display text-lg text-foreground">4</strong>zonas de defensa</div>
+                <div><strong className="block font-display text-lg text-foreground">&lt;5s</strong>primera respuesta</div>
+                <div><strong className="block font-display text-lg text-foreground">24/7</strong>monitoreo activo</div>
+              </div>
             </div>
           </div>
         </header>
 
-        <section className="border-b border-border bg-panel">
-          <div className="mx-auto grid max-w-[1360px] grid-cols-2 divide-x divide-border px-5 md:grid-cols-4 md:px-10">
-            {[
-              ["40+", "marcas integrables"],
-              ["1", "app central"],
-              ["24/7", "control disponible"],
-              ["3", "tipos de espacios"],
-            ].map(([value, label]) => (
-              <div key={label} className="px-4 py-8 first:pl-0 md:px-8 md:py-10">
-                <div className="font-display text-3xl font-bold text-primary md:text-4xl">{value}</div>
-                <div className="mt-1 text-sm text-muted-foreground">{label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="plataforma" className="border-b border-border bg-background">
-          <div className="mx-auto grid max-w-[1360px] items-center gap-14 px-5 py-24 md:px-10 lg:grid-cols-2 lg:py-32">
-            <div className="relative min-h-[560px] overflow-hidden rounded-[6px] bg-muted">
-              <img src={phoneScene} alt="Aplicación Smart Places controlando dispositivos del hogar" width={800} height={800} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-              <div className="absolute bottom-5 left-5 right-5 border border-primary/15 bg-background/92 p-5 backdrop-blur-lg md:left-auto md:w-[310px]">
-                <div className="flex items-center justify-between border-b border-border pb-4">
-                  <div><div className="text-xs text-muted-foreground">Casa principal</div><div className="mt-1 font-display font-semibold">Todo está bien</div></div>
-                  <span className="status-dot h-2.5 w-2.5 rounded-full bg-status" />
-                </div>
-                <div className="grid grid-cols-2 gap-3 pt-4 text-sm">
-                  <div className="bg-panel p-3"><span className="text-muted-foreground">Clima</span><strong className="mt-1 block text-lg">21°</strong></div>
-                  <div className="bg-panel p-3"><span className="text-muted-foreground">Accesos</span><strong className="mt-1 block text-lg">Seguro</strong></div>
-                </div>
-              </div>
-            </div>
-            <div className="lg:pl-12">
-              <div className="section-label">01 / Plataforma</div>
-              <h2 className="mt-6 max-w-[620px] font-display text-4xl font-bold leading-tight text-balance md:text-6xl">Distintas marcas.<br/><span className="text-primary">Un mismo lenguaje.</span></h2>
-              <p className="mt-7 max-w-[570px] text-lg leading-relaxed text-muted-foreground">Smart Places reúne dispositivos, reglas y alertas en una experiencia simple. Tú defines cómo debe funcionar tu espacio; la plataforma se encarga de coordinarlo.</p>
-              <div className="mt-10 divide-y divide-border border-y border-border">
-                {["Control centralizado desde cualquier lugar", "Rutinas automáticas según horarios y eventos", "Integración flexible de dispositivos multimarca"].map((item, index) => (
-                  <div key={item} className="flex items-center gap-4 py-5"><span className="font-display text-sm font-semibold text-primary">0{index + 1}</span><span className="font-medium">{item}</span></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="soluciones" className="border-b border-border bg-panel">
+        {/* 2. El problema */}
+        <section id="problema" className="border-b border-border bg-panel">
           <div className="mx-auto max-w-[1360px] px-5 py-24 md:px-10 lg:py-32">
-            <div className="grid gap-8 border-b border-border pb-12 lg:grid-cols-2">
-              <div><div className="section-label">02 / Soluciones</div><h2 className="mt-6 font-display text-4xl font-bold md:text-6xl">Tecnología aplicada<br/>a lo que importa.</h2></div>
-              <p className="max-w-[560px] self-end text-lg leading-relaxed text-muted-foreground lg:justify-self-end">Diseñamos el sistema alrededor de tu espacio, con equipos que colaboran para simplificar tareas y anticipar eventos.</p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4">
-              {solutions.map((solution) => (
-                <article key={solution.number} className="group border-b border-border py-10 md:border-r md:px-7 md:first:pl-0 md:nth-[2]:border-r-0 lg:border-r lg:nth-[2]:border-r lg:last:border-r-0 lg:last:pr-0">
-                  <div className="flex items-center justify-between"><span className="grid h-12 w-12 place-items-center rounded-[4px] bg-accent text-primary [&_svg]:h-6 [&_svg]:w-6"><TechIcon name={solution.icon} /></span><span className="font-display text-sm text-muted-foreground">{solution.number}</span></div>
-                  <h3 className="mt-12 font-display text-2xl font-semibold">{solution.title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{solution.text}</p>
+            <div className="section-label">01 / El problema</div>
+            <h2 className="mt-6 max-w-[820px] font-display text-4xl font-bold leading-tight text-balance md:text-6xl">
+              La seguridad tradicional llega tarde. <span className="text-primary">La nuestra llega antes.</span>
+            </h2>
+            <div className="mt-14 grid gap-5 md:grid-cols-3">
+              {problemas.map((p) => (
+                <article key={p.antes} className="glass rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-alert">
+                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    {p.antes}
+                  </div>
+                  <div className="mt-2 flex items-center gap-2 font-display text-xl font-bold text-status">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 13 4 4L19 7" /></svg>
+                    {p.despues}
+                  </div>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{p.detalle}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-b border-border bg-background">
-          <div className="mx-auto grid max-w-[1360px] items-center gap-14 px-5 py-24 md:px-10 lg:grid-cols-[.9fr_1.1fr] lg:py-32">
-            <div>
-              <div className="section-label">03 / Seguridad conectada</div>
-              <h2 className="mt-6 font-display text-4xl font-bold leading-tight md:text-6xl">Visibilidad total.<br/><span className="text-primary">Decisiones al instante.</span></h2>
-              <p className="mt-7 max-w-[560px] text-lg leading-relaxed text-muted-foreground">Cámaras, cerraduras, sensores y alarmas trabajan como un solo sistema. Recibe alertas relevantes y actúa desde tu teléfono.</p>
-              <div className="mt-9 flex items-center gap-6 border-l-2 border-primary pl-5"><strong className="font-display text-3xl">24/7</strong><span className="max-w-[220px] text-sm text-muted-foreground">Tu espacio disponible para supervisión en todo momento.</span></div>
+        {/* 3. Seguridad por zonas (interactiva) */}
+        <section id="zonas" className="relative border-b border-border">
+          <div className="bg-dotgrid absolute inset-0 opacity-40" />
+          <div className="relative mx-auto max-w-[1360px] px-5 py-24 md:px-10 lg:py-32">
+            <div className="section-label">02 / Seguridad por zonas</div>
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <h2 className="font-display text-4xl font-bold leading-tight text-balance md:text-6xl">
+                Cuatro anillos de defensa. <span className="text-primary">Cero sorpresas.</span>
+              </h2>
+              <p className="max-w-[520px] self-end text-lg leading-relaxed text-muted-foreground lg:justify-self-end">
+                Cada zona tiene su sensor, su disuasión y su escalamiento. Toca cada anillo para ver cómo responde el sistema, capa por capa.
+              </p>
             </div>
-            <img src={cameraLock} alt="Cámara y cerradura inteligente integradas por Smart Places" width={800} height={800} loading="lazy" className="aspect-[4/3] w-full rounded-[6px] object-cover" />
+            <div className="mt-14">
+              <ZonasInteractivas />
+            </div>
+            <Timeline />
           </div>
         </section>
 
-        <section id="segmentos" className="border-b border-border bg-panel">
+        {/* 4. Planes */}
+        <section id="planes" className="border-b border-border bg-panel">
           <div className="mx-auto max-w-[1360px] px-5 py-24 md:px-10 lg:py-32">
-            <div className="section-label">04 / Soluciones por espacio</div>
-            <h2 className="mt-6 max-w-[820px] font-display text-4xl font-bold leading-tight md:text-6xl">La escala cambia.<br/>El control sigue siendo simple.</h2>
-            <div className="mt-14 grid border-x border-t border-border md:grid-cols-3">
-              {segments.map((segment) => (
-                <article key={segment.title} className="flex min-h-[440px] flex-col border-b border-border p-7 md:border-r md:p-9 md:last:border-r-0">
-                  <div className="text-xs font-semibold uppercase tracking-[.14em] text-primary">{segment.label}</div>
-                  <h3 className="mt-5 font-display text-3xl font-bold">{segment.title}</h3>
-                  <p className="mt-4 leading-relaxed text-muted-foreground">{segment.description}</p>
-                  <ul className="mt-8 space-y-3 text-sm">
-                    {segment.items.map((item) => <li key={item} className="flex items-center gap-3"><span className="h-1.5 w-1.5 bg-primary" />{item}</li>)}
+            <div className="section-label">03 / Planes mensuales</div>
+            <h2 className="mt-6 max-w-[760px] font-display text-4xl font-bold leading-tight md:text-6xl">
+              Protección continua, <span className="text-primary">sin letra chica.</span>
+            </h2>
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {planes.map((plan) => (
+                <article
+                  key={plan.nombre}
+                  className={`relative flex flex-col rounded-xl p-8 ${
+                    plan.destacado
+                      ? "glass border-primary/50"
+                      : "border border-border bg-card"
+                  }`}
+                  style={plan.destacado ? { boxShadow: "0 0 40px -12px color-mix(in oklab, var(--color-primary) 40%, transparent)" } : undefined}
+                >
+                  {plan.destacado && (
+                    <span className="absolute -top-3 left-8 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Más elegido</span>
+                  )}
+                  <h3 className="font-display text-2xl font-bold">{plan.nombre}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{plan.detalle}</p>
+                  <div className="mt-6 flex items-baseline gap-2">
+                    <span className="font-display text-4xl font-bold text-primary">{plan.precio}</span>
+                    {plan.precio !== "A medida" && <span className="text-sm text-muted-foreground">/ mes</span>}
+                  </div>
+                  <ul className="mt-7 space-y-3 text-sm">
+                    {plan.items.map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-status" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 13 4 4L19 7" /></svg>
+                        {item}
+                      </li>
+                    ))}
                   </ul>
-                  <Button asChild variant="outline" className="mt-auto h-11 rounded-[4px] justify-between shadow-none">
-                    <a href="#contacto">Cotizar {segment.title.toLowerCase()} <ArrowIcon /></a>
+                  <Button asChild variant={plan.destacado ? "default" : "outline"} className="mt-8 h-12 rounded-md justify-between shadow-none">
+                    <a href="#contacto">Empezar ahora <ArrowIcon /></a>
                   </Button>
                 </article>
               ))}
@@ -261,21 +422,43 @@ function Index() {
           </div>
         </section>
 
-        <section id="contacto" className="bg-primary text-primary-foreground">
-          <div className="mx-auto grid max-w-[1360px] gap-10 px-5 py-20 md:px-10 lg:grid-cols-[1fr_auto] lg:items-center lg:py-24">
-            <div><div className="text-xs font-semibold uppercase tracking-[.16em] opacity-75">Tu próximo espacio inteligente</div><h2 className="mt-5 max-w-[820px] font-display text-4xl font-bold leading-tight md:text-6xl">Conversemos sobre tu proyecto.</h2><p className="mt-5 max-w-[660px] text-lg opacity-80">Diseñamos una solución integral según tu espacio, tus dispositivos y la forma en que quieres vivir o trabajar.</p></div>
-            <Button asChild size="lg" variant="secondary" className="h-14 rounded-[4px] px-8 text-base shadow-none">
-              <a href="mailto:contacto@smartplaces.cl">Solicitar cotización <ArrowIcon /></a>
-            </Button>
+        {/* 5. Contacto */}
+        <section id="contacto" className="relative">
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 60% 80% at 50% 100%, color-mix(in oklab, var(--color-primary) 12%, transparent), transparent)" }} />
+          <div className="relative mx-auto max-w-[1360px] px-5 py-24 text-center md:px-10 lg:py-32">
+            <div className="section-label">04 / Evaluación gratuita</div>
+            <h2 className="mx-auto mt-6 max-w-[820px] font-display text-4xl font-bold leading-tight text-balance md:text-6xl">
+              Revisamos tu espacio y te decimos <span className="text-primary text-glow">exactamente qué necesita.</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-[600px] text-lg leading-relaxed text-muted-foreground">
+              Sin compromiso. Un especialista visita tu casa, departamento o empresa en Santiago y diseña la defensa por zonas a tu medida.
+            </p>
+            <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+              <Button asChild size="lg" className="h-14 rounded-md px-9 text-base shadow-none">
+                <a href={WHATSAPP_URL} target="_blank" rel="noreferrer"><WhatsAppIcon /> Agendar por WhatsApp</a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-14 rounded-md px-9 text-base shadow-none">
+                <a href="mailto:contacto@smartplaces.cl">contacto@smartplaces.cl</a>
+              </Button>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="bg-foreground text-primary-foreground">
-        <div className="mx-auto grid max-w-[1360px] gap-10 px-5 py-12 md:grid-cols-3 md:px-10">
-          <div><div className="font-display text-xl font-bold">Smart<span className="text-link">Places</span></div><p className="mt-3 max-w-[280px] text-sm opacity-60">Automatización, IoT y seguridad para espacios que responden.</p></div>
-          <div className="text-sm opacity-70 md:text-center"><a href="#plataforma" className="hover:opacity-100">Plataforma</a><span className="mx-4 opacity-30">/</span><a href="#soluciones" className="hover:opacity-100">Soluciones</a><span className="mx-4 opacity-30">/</span><a href="#segmentos" className="hover:opacity-100">Segmentos</a></div>
-          <div className="text-sm opacity-60 md:text-right">© 2026 Smart Places<br/>contacto@smartplaces.cl</div>
+      <footer className="border-t border-border bg-panel">
+        <div className="mx-auto grid max-w-[1360px] gap-8 px-5 py-12 md:grid-cols-3 md:px-10">
+          <div>
+            <div className="font-display text-xl font-bold">Smart<span className="text-primary">Places</span></div>
+            <p className="mt-3 max-w-[280px] text-sm text-muted-foreground">Domótica y seguridad proactiva. Tu casa actúa antes de que algo pase.</p>
+          </div>
+          <div className="text-sm text-muted-foreground md:text-center">
+            <a href="#problema" className="hover:text-primary">El problema</a>
+            <span className="mx-4 opacity-30">/</span>
+            <a href="#zonas" className="hover:text-primary">Zonas</a>
+            <span className="mx-4 opacity-30">/</span>
+            <a href="#planes" className="hover:text-primary">Planes</a>
+          </div>
+          <div className="text-sm text-muted-foreground md:text-right">© 2026 Smart Places · Santiago de Chile<br />contacto@smartplaces.cl</div>
         </div>
       </footer>
     </div>
