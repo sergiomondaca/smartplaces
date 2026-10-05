@@ -631,22 +631,22 @@ function FormularioLead() {
         <div>
           <label htmlFor="nombre" className="mb-2 block text-sm font-semibold">Nombre</label>
           <input id="nombre" className={inputClass} value={valores.nombre} onChange={(e) => actualizar("nombre", e.target.value)} placeholder="Tu nombre" autoComplete="name" />
-          {errores.nombre && <p className="mt-1.5 text-xs text-alert">{errores.nombre}</p>}
+          {errores["nombre"] && <p className="mt-1.5 text-xs text-alert">{errores["nombre"]}</p>}
         </div>
         <div>
           <label htmlFor="telefono" className="mb-2 block text-sm font-semibold">Teléfono</label>
           <input id="telefono" className={inputClass} value={valores.telefono} onChange={(e) => actualizar("telefono", e.target.value)} placeholder="+56 9 ..." autoComplete="tel" inputMode="tel" />
-          {errores.telefono && <p className="mt-1.5 text-xs text-alert">{errores.telefono}</p>}
+          {errores["telefono"] && <p className="mt-1.5 text-xs text-alert">{errores["telefono"]}</p>}
         </div>
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-semibold">Email</label>
           <input id="email" type="email" className={inputClass} value={valores.email} onChange={(e) => actualizar("email", e.target.value)} placeholder="tu@email.cl" autoComplete="email" />
-          {errores.email && <p className="mt-1.5 text-xs text-alert">{errores.email}</p>}
+          {errores["email"] && <p className="mt-1.5 text-xs text-alert">{errores["email"]}</p>}
         </div>
         <div>
           <label htmlFor="comuna" className="mb-2 block text-sm font-semibold">Comuna</label>
           <input id="comuna" className={inputClass} value={valores.comuna} onChange={(e) => actualizar("comuna", e.target.value)} placeholder="Ej: Las Condes" />
-          {errores.comuna && <p className="mt-1.5 text-xs text-alert">{errores.comuna}</p>}
+          {errores["comuna"] && <p className="mt-1.5 text-xs text-alert">{errores["comuna"]}</p>}
         </div>
       </div>
 
@@ -674,7 +674,7 @@ function FormularioLead() {
             </button>
           ))}
         </div>
-        {errores.tipoPropiedad && <p className="mt-1.5 text-xs text-alert">{errores.tipoPropiedad}</p>}
+        {errores["tipoPropiedad"] && <p className="mt-1.5 text-xs text-alert">{errores["tipoPropiedad"]}</p>}
       </div>
 
       <div className="mt-5">
