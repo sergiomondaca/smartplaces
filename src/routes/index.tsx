@@ -163,7 +163,7 @@ function HouseRings() {
 /* Diagrama interactivo de seguridad por zonas */
 function ZonasInteractivas() {
   const [activa, setActiva] = useState(0);
-  const zona = zonas[activa];
+  const zona = zonas[activa] ?? zonas[0]!;
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
