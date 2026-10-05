@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const leadSchema = z.object({
+export const leadSchema = z.object({
   nombre: z.string().trim().min(2, "Ingresa tu nombre").max(100, "Nombre demasiado largo"),
   telefono: z
     .string()
