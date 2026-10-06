@@ -454,7 +454,7 @@ function Faq() {
 
 const vacio = { nombre: "", email: "", telefono: "", comuna: "", tipoPropiedad: "", mensaje: "" };
 
-function Campo({ label, error, children, id }: { label: string; error?: string; children: ReactNode; id: string }) {
+function Campo({ label, error, children, id }: { label: string; error?: string | undefined; children: ReactNode; id: string }) {
   return (
     <div>
       <label htmlFor={id} className="mb-1 block text-sm font-semibold text-ink">{label}</label>
