@@ -8,6 +8,13 @@
       "when": 1791158931817,
       "tag": "0000_create_leads_table",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791289411790,
+      "tag": "0001_leads_plan_mensaje",
+      "breakpoints": true
     }
   ]
 }

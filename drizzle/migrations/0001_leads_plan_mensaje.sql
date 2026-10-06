@@ -1,0 +1,1 @@
+ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS plan text, ADD COLUMN IF NOT EXISTS mensaje text;
