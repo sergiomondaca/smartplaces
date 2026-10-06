@@ -23,10 +23,10 @@ export const pilares: { nombre: Pilar; texto: string }[] = [
 ];
 
 export const zonas = [
-  { n: 1, nombre: "Perímetro / vereda", x: 50, y: 92, detecta: "Personas y vehículos que se detienen frente a tu casa.", disuade: "Cámara con IA que ignora a quien solo pasa.", avisa: "Notificación a tu celular con imagen." },
-  { n: 2, nombre: "Reja y antejardín", x: 30, y: 74, detecta: "Apertura de reja o presencia en el antejardín.", disuade: "Luz intensa y sirena disuasiva al instante.", avisa: "Tu celular y familiares que definas." },
-  { n: 3, nombre: "Fachada y acceso", x: 60, y: 57, detecta: "Quién toca la puerta o manipula la chapa.", disuade: "Cámara de puerta con voz y chapa inteligente.", avisa: "Videollamada al celular desde cualquier lugar." },
-  { n: 4, nombre: "Interior", x: 22, y: 30, detecta: "Movimiento, gas, humo e inundación.", disuade: "Sirena interior y corte automático de válvulas.", avisa: "Tú, tu familia y nuestro equipo técnico." },
+  { n: 1, nombre: "Perímetro / vereda", x: 65, y: 93, detecta: "Personas y vehículos que se detienen frente a tu casa.", disuade: "Cámara con IA que ignora a quien solo pasa.", avisa: "Notificación a tu celular con imagen." },
+  { n: 2, nombre: "Reja y antejardín", x: 44, y: 78, detecta: "Apertura de reja o presencia en el antejardín.", disuade: "Luz intensa y sirena disuasiva al instante.", avisa: "Tu celular y familiares que definas." },
+  { n: 3, nombre: "Fachada y acceso", x: 42, y: 57, detecta: "Quién toca la puerta o manipula la chapa.", disuade: "Cámara de puerta con voz y chapa inteligente.", avisa: "Videollamada al celular desde cualquier lugar." },
+  { n: 4, nombre: "Interior", x: 24, y: 36, detecta: "Movimiento, gas, humo e inundación.", disuade: "Sirena interior y corte automático de válvulas.", avisa: "Tú, tu familia y nuestro equipo técnico." },
 ];
 
 export const tiempo = ["Detecta", "Disuade", "Avisa", "Escala"];
