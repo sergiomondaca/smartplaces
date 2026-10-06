@@ -8,12 +8,14 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { Button } from "@/components/ui/button";
 import { enviarLead, leadSchema } from "@/lib/leads.functions";
 import {
   CONTACTO, slides, pilares, zonas, tiempo, escalera, dispositivos, pasos, planes, cooperacion,
   compatibilidad, faqs, comunas, type Pilar,
 } from "@/data/sitio";
 import house1 from "@/assets/house1.jpg";
+import casaIsometrica from "@/assets/casa-isometrica.jpg";
 import cocina from "@/assets/cocina.jpg";
 import living from "@/assets/living.jpg";
 import energia from "@/assets/casa-energia.jpg";
@@ -214,14 +216,14 @@ function Zonas() {
         </div>
         <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_360px]">
           <div className="reveal relative overflow-hidden rounded-lg shadow-xl">
-            <img src={house1} alt="Casa moderna con antejardín, reja y vereda" width={1920} height={1088} loading="lazy" className="w-full object-cover" />
+            <img src={casaIsometrica} alt="Vista isométrica de la casa: perímetro, reja, acceso e interior" width={1536} height={1024} loading="lazy" className="block aspect-[3/2] w-full object-cover" />
             {zonas.map((zz, k) => (
-              <button key={zz.n} style={{ left: `${zz.x}%`, top: `${zz.y}%` }}
+              <Button size="icon" key={zz.n} style={{ left: `${zz.x}%`, top: `${zz.y}%` }}
                 onMouseEnter={() => setAct(k)} onFocus={() => setAct(k)} onClick={() => setAct(k)}
                 aria-label={`Zona ${zz.n}: ${zz.nombre}`} aria-pressed={act === k}
                 className={`pulse-ring absolute grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-bold text-primary-foreground shadow-lg transition ${act === k ? "scale-110 bg-primary" : "bg-accent"}`}>
                 {zz.n}
-              </button>
+              </Button>
             ))}
           </div>
           <div className="reveal rounded-lg bg-card p-7 shadow-lg" aria-live="polite">
