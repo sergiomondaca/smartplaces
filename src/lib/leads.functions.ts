@@ -3,18 +3,20 @@ import { z } from "zod";
 
 export const leadSchema = z.object({
   nombre: z.string().trim().min(2, "Ingresa tu nombre").max(100, "Nombre demasiado largo"),
+  email: z.string().trim().email("Ingresa un email válido").max(255, "Email demasiado largo"),
   telefono: z
     .string()
     .trim()
     .min(8, "Ingresa un teléfono válido")
     .max(20, "Teléfono demasiado largo")
     .regex(/^[0-9+\s()-]+$/, "El teléfono solo puede tener números, + y espacios"),
-  email: z.string().trim().email("Ingresa un email válido").max(255, "Email demasiado largo"),
-  comuna: z.string().trim().min(2, "Ingresa tu comuna").max(80, "Comuna demasiado larga"),
-  tipoPropiedad: z.enum(["casa", "departamento", "condominio", "local"], {
+  comuna: z.string().trim().min(2, "Selecciona tu comuna").max(80),
+  tipoPropiedad: z.enum(["casa", "departamento", "condominio", "inmobiliaria"], {
     message: "Selecciona el tipo de propiedad",
   }),
-  intereses: z.array(z.string().max(50)).max(10, "Demasiados intereses").default([]),
+  plan: z.string().trim().max(60).optional().default(""),
+  mensaje: z.string().trim().max(1000, "Mensaje demasiado largo").optional().default(""),
+  consentimiento: z.literal(true, { message: "Debes aceptar el uso de tus datos" }),
 });
 
 export type LeadInput = z.input<typeof leadSchema>;
@@ -28,20 +30,17 @@ export const enviarLead = createServerFn({ method: "POST" })
       process.env["SUPABASE_PUBLISHABLE_KEY"]!,
       { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
     );
-
     const { error } = await supabase.from("leads").insert({
       nombre: data.nombre,
       telefono: data.telefono,
       email: data.email,
       comuna: data.comuna,
       tipo_propiedad: data.tipoPropiedad,
-      intereses: data.intereses,
+      intereses: data.plan ? [data.plan] : [],
+      plan: data.plan || null,
+      mensaje: data.mensaje || null,
       origen: "sitio_web",
     });
-
-    if (error) {
-      throw new Error("No pudimos guardar tu solicitud. Intenta de nuevo.");
-    }
-
+    if (error) throw new Error("No pudimos guardar tu solicitud. Intenta de nuevo.");
     return { ok: true };
   });
